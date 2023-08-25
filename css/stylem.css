@@ -1,0 +1,16 @@
+
+/*Ajustar imagen del Carrusel*/
+#carouselExampleIndicators .carousel-item img{
+    object-fit: cover; /*El contenido dimensiona para mantener su relación de aspecto mientras llena el cuadro de contenido completo del elemento. Si la relación de aspecto del objeto no coincide con la relación de aspecto de su caja, entonces el objeto se recortará para que se ajuste.*/
+    object-position: center; /*determina el alineamiento del elemento dentro de la caja, en este caso el centro*/
+    height: 40vh;
+    overflow: hidden; /*especifica si recortar contenido, dibujar barras de desplazamiento o mostrar el contenido excedente en un elemento a nivel de bloque, en este caso el contenido es recortado y no se muestran barras de posición*/
+}
+
+#carouselExampleIndicators .carousel-item .carousel-caption h2{
+    font-size: 3em;
+}
+
+.barra-buscar{
+    display: inline;
+}
