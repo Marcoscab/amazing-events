@@ -7,6 +7,8 @@
     overflow: hidden; /*especifica si recortar contenido, dibujar barras de desplazamiento o mostrar el contenido excedente en un elemento a nivel de bloque, en este caso el contenido es recortado y no se muestran barras de posición*/
 }
 
+
+
 #carouselExampleIndicators .carousel-item .carousel-caption h2{
     font-size: 3em;
 }
