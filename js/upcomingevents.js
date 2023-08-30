@@ -11,7 +11,7 @@ let eventosFiltrados=[];
 for (let evento of eventos) {
     let fechaEvento = Date.parse(evento.date);
 
-    if ( fechaEvento<fechaActual){
+    if ( fechaEvento>=fechaActual){
         eventosFiltrados.push(evento);
     };
     
@@ -32,7 +32,7 @@ for (let i = 0; i < eventosFiltrados.length; i++) {
         componentes += `<div class="carousel-item active ">
                             <img src="${eventosFiltrados[i].image}" class="d-block w-100" alt="Imagen concierto">
                               <div class="carousel-caption d-none d-md-block">
-                                  <h2>PAST EVENTS</h2>
+                                  <h2>UPCOMING EVENTS</h2>
                              </div>
                         </div>`;
 
@@ -55,7 +55,7 @@ for (let i = 0; i < eventosFiltrados.length; i++) {
         componentes += `<div class="carousel-item">
                             <img src="${eventosFiltrados[i].image}" class="d-block w-100" alt="Imagen concierto">
                             <div class="carousel-caption d-none d-md-block">
-                                <h2>PAST EVENTS</h2>
+                                <h2>UPCOMING EVENTS</h2>
                             </div>
                         </div>`;
 
