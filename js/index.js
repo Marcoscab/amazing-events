@@ -7,27 +7,25 @@ let $tarjetas = document.getElementById("tarjetas")
 let eventos = data.events;
 
 let carruselItem = "";//Aca se guarda el carrusel item con referencia a la imagen de cada evento
-
 let tarjetas = ""// Aca se guardan las tarjetas
-
 let botones = ""; // Aca se guardan los botones del carrusel.
 
 /*Funcion que devuelve el HTML para las imagenes del carrusel*/
-function templateCarrusel(eventos) {
+function templateCarrusel(eventos, tiempo) {
     for (let i = 0; i < eventos.length; i++) {
 
         if (i == 0) {
             carruselItem += `<div class="carousel-item active ">
                                 <img src="${eventos[i].image}" class="d-block w-100" alt="Imagen concierto">
                                   <div class="carousel-caption d-none d-md-block">
-                                      <h2>HOME</h2>
+                                      <h2>${tiempo}</h2>
                                  </div>
                             </div>`;
         } else {
             carruselItem += `<div class="carousel-item">
                                 <img src="${eventos[i].image}" class="d-block w-100" alt="Imagen concierto">
                                 <div class="carousel-caption d-none d-md-block">
-                                    <h2>HOME</h2>
+                                    <h2>${tiempo}</h2>
                                 </div>
                             </div>`;
         }
@@ -91,7 +89,7 @@ function templateTarjetas(eventos) {
 
 /*Colocamos los componentes creados en HTML.*/
 $botoneraCarrusel.innerHTML = templateBotoneraCarrusel(eventos);
-$carruselItem.innerHTML = templateCarrusel(eventos);
+$carruselItem.innerHTML = templateCarrusel(eventos, "HOME");
 $tarjetas.innerHTML = templateTarjetas(eventos);
 
 
