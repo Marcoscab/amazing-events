@@ -193,18 +193,20 @@ function obtenerCategorias(eventos) {
 
 /*----------------------------ACTION LISTENERS----------------------------*/
 $checkbox.addEventListener("click", (event) => { filtro(event, eventos, setDeChecks, $serchBar, $tarjetas) });
-$serchBar.addEventListener("keyup", (event) => { filtro(event, eventos, setDeChecks, $serchBar, $tarjetas); });
+$serchBar.addEventListener("input", (event) => { filtro(event, eventos, setDeChecks, $serchBar, $tarjetas); });
 
 /*----------------------------FIN ACTION LISTENERS------------------------*/
 
 
 /*--------------------LLAMADO FUNCIONES ARRANQUE----------------------------*/
 //Colocamos los componentes creados en HTML
+console.log([$serchBar]);
 let categorias = obtenerCategorias(eventos);
 templateCheckbox($checkbox, categorias);
 templateCarrusel(eventos, $carruselItem, "HOME");
 templateBotoneraCarrusel(eventos, $botoneraCarrusel);
 templateTarjetas(eventos, $tarjetas);
+
 /*--------------------FIN LLAMADO FUNCIONES ARRANQUE-----------------------*/
 
 
