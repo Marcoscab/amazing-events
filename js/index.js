@@ -1,6 +1,5 @@
 
 /*----------------------------VARIABLES----------------------------*/
-
 /*Recuperamos los elementos a modificar dinamicamente */
 let $carruselItem = document.getElementById("carrusel");
 let $botoneraCarrusel = document.getElementById("botoneraCarrusel");
@@ -13,10 +12,7 @@ let setDeChecks = new Set(); // Lista donde se guardan los checks marcados.
 
 /*-----------------------------FIN VARIABLES---------------------------*/
 
-
-
 /*----------------------------FUNCIONES----------------------------*/
-
 //Funcion: Crea el HTML para las imagenes del carrusel y llama a la funcion para insertarlo
 function templateCarrusel(eventos, componente, pagina) {
     let carruselItem = "";
@@ -189,9 +185,9 @@ function obtenerCategorias(eventos) {
     return categoriasFiltrada;
 };
 
-async function inicializar(url, checkbox, carruselItem, botoneraCarrusel, tarjetas,serchBar) {
-   
-    await fetch(url)
+//Funcion q se conecta a la api para recuperar info e inicializar la página.
+function inicializar(url, checkbox, carruselItem, botoneraCarrusel, tarjetas,serchBar) { 
+    fetch(url)
         .then((response) => { return response.json() })
         .then(data => {
             let eventos = data.events;
@@ -200,37 +196,21 @@ async function inicializar(url, checkbox, carruselItem, botoneraCarrusel, tarjet
             templateCarrusel(eventos, carruselItem, "HOME");
             templateBotoneraCarrusel(eventos, botoneraCarrusel);
             templateTarjetas(eventos, tarjetas);
+
+            /*----------------------------ACTION LISTENERS----------------------------*/
             checkbox.addEventListener("click", (event) => { filtro(event, eventos, setDeChecks, serchBar, tarjetas) });
             serchBar.addEventListener("input", (event) => { filtro(event, eventos, setDeChecks, serchBar, tarjetas); });
 
         })
         .catch((error) => { console.log(error) });
 
-  
 }
-/*----------------------------FIN FUNCIONES-------------------------------*/
+/*----------------------------FIN FUNCIONES---------------------------------*/
 
 
-/*----------------------------ACTION LISTENERS----------------------------*/
-/* $checkbox.addEventListener("click", (event) => { filtro(event, eventos, setDeChecks, $serchBar, $tarjetas) });
-$serchBar.addEventListener("input", (event) => { filtro(event, eventos, setDeChecks, $serchBar, $tarjetas); }); */
-
-/*----------------------------FIN ACTION LISTENERS------------------------*/
-
-
-/*--------------------LLAMADO FUNCIONES ARRANQUE----------------------------*/
-
-
-//Colocamos los componentes creados en HTML
+/*--------------------LLAMADO A FUNCIONES----------------------------*/
 let url = "https://mindhub-xj03.onrender.com/api/amazing";
 inicializar(url, $checkbox, $carruselItem, $botoneraCarrusel, $tarjetas,$serchBar);
-
-/* let categorias = obtenerCategorias(eventos);
-templateCheckbox($checkbox, categorias);
-templateCarrusel(eventos, $carruselItem, "HOME");
-templateBotoneraCarrusel(eventos, $botoneraCarrusel);
-templateTarjetas(eventos, $tarjetas); */
-
 /*--------------------FIN LLAMADO FUNCIONES ARRANQUE-----------------------*/
 
 

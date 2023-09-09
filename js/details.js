@@ -1,7 +1,7 @@
 /*----------------------------VARIABLES----------------------------*/
 
 const $tarjeta = document.getElementById("tarjetaDetallada");
-let eventos = data.events; // Guardo los datos de la DB
+/* let eventos = data.events; // Guardo los datos de la DB */
 const objetoURL = new URLSearchParams(location.search);//Obtengo el objeto url donde se guarda los datos de q viajan en la URL
 const id = objetoURL.get("id");//Obtengo el Id que viaja en la URL utilizando par clave valor.
 
@@ -10,10 +10,30 @@ const id = objetoURL.get("id");//Obtengo el Id que viaja en la URL utilizando pa
 
 /*----------------------------FUNCIONES----------------------------*/
 
+async function buscarEventos(url) {
+
+    try {
+        const response = await fetch(url);
+        console.log(response);
+        if (!response.ok) {
+            throw { Ok: false, msg: "Error 404" };
+        }
+        const data = await response.json();
+        console.log(data.events);
+        return data.events;
+
+
+    } catch (error) {
+        console.log(error);
+    }
+}
+
 //Funcion: busca el evento segun Id y lo devuelve
 function buscarEvento(eventos, id) {
-    let evento = eventos.find((evento) => { return evento._id === id });
-    //console.log(evento);
+    console.log(eventos);
+    console.log(id);
+    let evento = eventos.find((evento) => { return evento._id == id });
+    console.log(evento);
     return evento;
 }
 
@@ -33,24 +53,34 @@ function templateTarjeta(evento) {
             </div>
         </div>
     </div>`
-
     return tarjeta;
 
 };
-
 
 //Funcion para insertar componentes
 function insertarComponente(component, template) {
     component.innerHTML = template;
 };
 
+function inicializar(url, idEvento, tarjetaDetalles) {
+
+    fetch(url)
+    .then((response) => {return response.json(); })
+    .then((datos)=>{
+        let eventos = datos.events;
+        //console.log(eventos);
+        let evento= buscarEvento(eventos,idEvento);
+        let template= templateTarjeta(evento);
+        insertarComponente(tarjetaDetalles,template);
+    });
+
+}
+
 /*----------------------------FIN FUNCIONES------------------------*/
 
 
 /*--------------------LLAMADO FUNCIONES ARRANQUE----------------------------*/
-let evento = buscarEvento(eventos, id);//Buscamos el evento segun la id recibida en la URL
-let template = templateTarjeta(evento);
-insertarComponente($tarjeta,template);
-
+let url = "https://mindhub-xj03.onrender.com/api/amazing";
+inicializar(url,id,$tarjeta);
 
 /*--------------------FIN LLAMADO FUNCIONES ARRANQUE------------------------*/
