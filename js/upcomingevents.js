@@ -11,6 +11,9 @@ let eventos = data.events; // GUardo los datos de la DB
 let setDeChecks = new Set(); // Lista donde se guardan los checks marcados.
 let fechaActual = Date.parse(data.currentDate); //Convierto la fecha actual al formato fecha
 let eventosFiltrados=[];
+
+let url = "https://mindhub-xj03.onrender.com/api/amazing";//url de la API.
+
 /*-----------------------------FIN VARIABLES---------------------------*/
 
 /*----------------------------FUNCIONES----------------------------*/
@@ -226,7 +229,7 @@ function inicializar(url, checkbox, carruselItem, botoneraCarrusel, tarjetas,ser
 
 
 /*--------------------LLAMADO A FUNCIONES----------------------------*/
-let url = "https://mindhub-xj03.onrender.com/api/amazing";
+
 inicializar(url, $checkbox, $carruselItem, $botoneraCarrusel, $tarjetas,$serchBar);
 /*--------------------FIN LLAMADO FUNCIONES ARRANQUE-----------------------*/
 

@@ -1,7 +1,7 @@
 /*----------------------------VARIABLES----------------------------*/
 
 const $tarjeta = document.getElementById("tarjetaDetallada");
-/* let eventos = data.events; // Guardo los datos de la DB */
+//let eventos = data.events; // Guardo los datos de la DB 
 const objetoURL = new URLSearchParams(location.search);//Obtengo el objeto url donde se guarda los datos de q viajan en la URL
 const id = objetoURL.get("id");//Obtengo el Id que viaja en la URL utilizando par clave valor.
 
@@ -10,7 +10,7 @@ const id = objetoURL.get("id");//Obtengo el Id que viaja en la URL utilizando pa
 
 /*----------------------------FUNCIONES----------------------------*/
 
-async function buscarEventos(url) {
+/* async function buscarEventos(url) {
 
     try {
         const response = await fetch(url);
@@ -26,7 +26,7 @@ async function buscarEventos(url) {
     } catch (error) {
         console.log(error);
     }
-}
+} */
 
 //Funcion: busca el evento segun Id y lo devuelve
 function buscarEvento(eventos, id) {
