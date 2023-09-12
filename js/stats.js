@@ -2,13 +2,13 @@
 let url = "https://mindhub-xj03.onrender.com/api/amazing";
 let $tablaStatics = document.getElementById("tablaStatics");
 let $tablaPastStatics = document.getElementById("tablaPastStatics");
-
+let $tablaFutureStatics = document.getElementById("tablaFutureStatics");
 
 
 
 /*----------------------------FUNCIONES----------------------------*/
 //Funcion q se conecta a la api para recuperar info e inicializar la página.
-function inicializar(url, tablaStatics, tablaPastStatics) {
+function inicializar(url, tablaStatics, tablaPastStatics, tablaFutureStatics) {
     let eventos = [];
     let eventosPasados = [];
     let eventosFuturos = [];
@@ -31,31 +31,17 @@ function inicializar(url, tablaStatics, tablaPastStatics) {
             let templateStatics = templateEventStatics(eventoMayoAsistencia, eventoMenorAsistencia, eventoMayorCapacidad);
             insertarComponente(tablaStatics, templateStatics); // Inserto componenete tabla event statics.
             categorias = obtenerCategorias(eventos);//Recupero las categorias
-            let estadisticaEventosPasados = estadisticasPorCategoriasEvtP(categorias, eventosPasados);//Recupero array de obj con info x cada categoria de evt pasados
-            let templateEstadisticaEventos = templateEstadisticas(estadisticaEventosPasados); // creo el template de HTML
+            let estadisticaEventosPasados = estadisticasPorCategorias(categorias, eventosPasados);//Recupero array de obj con info x cada categoria de evt pasados
+            let templateTitulo = `<tr><th>Categories</th><th>Revenues</th><th>Percentage of assitance</th></tr>`;
+            let templateEstadisticaEventos = templateEstadisticas(estadisticaEventosPasados, templateTitulo); // creo el template de HTML
             insertarComponente(tablaPastStatics, templateEstadisticaEventos); // Inserto componenete tabla statics past events.
+            let estadisticaEventosfuturos = estadisticasPorCategorias(categorias, eventosFuturos);//Recupero array de obj con info x cada categoria de evt futuros
+            templateTitulo = `<tr><th>Categories</th><th>Revenues (Estimated)</th><th>Percentage of assitance (Estimated)</th></tr>`;
+            templateEstadisticaEventos = templateEstadisticas(estadisticaEventosfuturos, templateTitulo); // creo el template de HTML
+            insertarComponente(tablaFutureStatics, templateEstadisticaEventos); // Inserto componenete tabla statics future events.
         })
         .catch((error) => { console.log(error) });
 }
-
-/* async function recuperarEventos(url) {
-
-    try {
-        const response = await fetch(url);
-        console.log(response);
-        if (!response.ok) {
-            throw { Ok: false, msg: "Error 404" };
-        }
-        const data = await response.json();
-        console.log(data.events);
-      
-        return data.events;
-
-
-    } catch (error) {
-        console.log(error);
-    }
-} */
 
 //Funcion para filtrar eventos futuros por fecha actual. 
 function proximosEventos(eventos, fechaActual) {
@@ -139,15 +125,14 @@ function mayorCapacidad(eventos) {
 //Funcion para completar Event Static
 function templateEventStatics(mayorAsistencia, menorAsistencia, mayorCapacidad) {
     template = `                        
-    <td>${mayorAsistencia.name}&nbsp &nbsp ${((mayorAsistencia.assistance / mayorAsistencia.capacity) * 100).toFixed(2)}%</td>
-    <td>${menorAsistencia.name}&nbsp &nbsp ${((menorAsistencia.assistance / menorAsistencia.capacity) * 100).toFixed(2)}%</td>
-    <td>${mayorCapacidad.name}&nbsp &nbsp ${mayorCapacidad.capacity}</td>`
+    <td>${mayorAsistencia.name}&nbsp &nbsp${((mayorAsistencia.assistance / mayorAsistencia.capacity) * 100).toFixed(2)}%</td>
+    <td>${menorAsistencia.name}&nbsp &nbsp${((menorAsistencia.assistance / menorAsistencia.capacity) * 100).toFixed(2)}%</td>
+    <td>${mayorCapacidad.name}&nbsp &nbsp${mayorCapacidad.capacity.toLocaleString()}</td>`
     return template;
 }
 
 //Funcion para insertar componentes
 function insertarComponente(component, template) {
-    console.log(template);
     component.innerHTML = template;
 };
 
@@ -164,8 +149,8 @@ function obtenerCategorias(eventos) {
     return categoriasFiltrada;
 };
 
-//Funcion para obtener estadisticas por categorias para eventos pasados
-function estadisticasPorCategoriasEvtP(categorias, eventos) {
+//Funcion para obtener estadisticas por categorias para eventos pasados y futuros
+function estadisticasPorCategorias(categorias, eventos) {
     let estadisticasEventos = { //en este objeto guardo los datos para cada categoria
         categoria: "",
         revenues: 0,
@@ -187,32 +172,28 @@ function estadisticasPorCategoriasEvtP(categorias, eventos) {
         eventos.forEach(evento => {
             if (evento.category === categoria) {
                 contador++;
-                estadisticasEventos.revenues += evento.price * evento.assistance;
-                estadisticasEventos.porcentajeAsistencia += (evento.assistance / evento.capacity) * 100;
+                estadisticasEventos.revenues += evento.assistance ? evento.price * evento.assistance : evento.price * evento.estimate;
+                estadisticasEventos.porcentajeAsistencia += evento.assistance ? (evento.assistance / evento.capacity) * 100 : (evento.estimate / evento.capacity) * 100;
             }
         });
         estadisticasEventos.categoria = categoria;
         estadisticasEventos.porcentajeAsistencia = estadisticasEventos.porcentajeAsistencia / contador;
         arrayEstadisticas.push(estadisticasEventos);
-    })
-
-    return arrayEstadisticas;
+    });
+    let array = arrayEstadisticas.filter(evento => !isNaN(evento.porcentajeAsistencia));
+    return array;
 }
 
+
+
 //Funcion para crear template estadisticas de Upcoming y past events.
-function templateEstadisticas(estadisticas) {
-    template = `        
-    <tr >
-        <th>Categories</th>
-        <th>Revenues</th>
-        <th>Percentage of assitance</th>
-    </tr>`
+function templateEstadisticas(estadisticas, template) {
 
     estadisticas.forEach(estadistica => {
         template += `
         <tr>                   
             <td>${estadistica.categoria}</td>
-            <td>$${estadistica.revenues}</td>
+            <td>$${estadistica.revenues.toLocaleString()}</td>
             <td>${estadistica.porcentajeAsistencia.toFixed(2)}%</td>
         </tr>`
     });
@@ -224,7 +205,7 @@ function templateEstadisticas(estadisticas) {
 
 /*--------------------LLAMADO A FUNCIONES----------------------------*/
 //inicializar(url);
-inicializar(url, $tablaStatics, $tablaPastStatics);
+inicializar(url, $tablaStatics, $tablaPastStatics, $tablaFutureStatics);
 
 
 
