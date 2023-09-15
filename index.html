@@ -13,126 +13,158 @@
 </head>
 
 <body>
-    <header>
-        <!-- BARRA NAVEGACION -->
-        <!-- Le agrego el modo oscuro. -->
-        <nav class="navbar navbar-expand-lg bg-dark border-bottom border-body" data-bs-theme="dark">
-            <div class="container-fluid">
+    <div id="app">
+        <header>
+            <!-- BARRA NAVEGACION -->
+            <!-- Le agrego el modo oscuro. -->
+            <nav class="navbar navbar-expand-lg bg-dark border-bottom border-body" data-bs-theme="dark">
+                <div class="container-fluid">
 
-                <!-- ICONO -->
-                <a class="navbar-brand" href="#">
-                    <img src="./img/amazing_brand.png" alt="logo marca" width="130" height="32">
-                </a>
+                    <!-- ICONO -->
+                    <a class="navbar-brand" href="#">
+                        <img src="./img/amazing_brand.png" alt="logo marca" width="130" height="32">
+                    </a>
 
-                <!-- Boton Collapse -->
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
+                    <!-- Boton Collapse -->
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+
+                    <!-- Agrego justify-content-end para llevar los botones a la izquierda-->
+                    <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                        <ul class="navbar-nav">
+                            <li class="nav-item">
+                                <a class="nav-link active" aria-current="page" href="#">HOME</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="./upcomingevents.html">UPCOMING EVENTS</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="./pastevents.html">PAST EVENTS</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="./contact.html">CONTACTS</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="./stats.html">STATS</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+
+            <!-- CARRUSEL -->
+            <div id="carouselExampleIndicators" class="carousel slide">
+                <!-- Botones bajos del carrusel -->
+                <div id="botoneraCarrusel" class="carousel-indicators">
+                    <!-- Aca van los botones bajos del carrusel crados dinamicamente-->
+                    <button v-for="(evento,index) of eventosFiltrados" type="button" data-bs-target="#carouselExampleIndicators"
+                        v-bind:data-bs-slide-to="index" v-bind:class="index===0 ? 'active' :'' " aria-current="true"
+                        v-bind:aria-label="'Slide '+ (index+1)">
+                    </button>
+                </div>
+
+                <!-- imagenes del carrusel -->
+                <div id="carrusel" class="carousel-inner">
+                    <!--  Aca van las imagenes del carrusel creadas dinamicamente-->
+                    <div v-for="(evento, index) of eventosFiltrados"
+                        :class="index===0 ? 'carousel-item active' : 'carousel-item'">
+                        <img v-bind:src="evento.image" class="d-block w-100" alt="Imagen">
+                        <div class="carousel-caption d-none d-md-block">
+                            <h2>HOME</h2>
+                        </div>
+                    </div>
+
+
+                </div>
+
+                <!-- Botones next y previous del carrusel. -->
+                <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators"
+                    data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
                 </button>
-
-                <!-- Agrego justify-content-end para llevar los botones a la izquierda-->
-                <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-                    <ul class="navbar-nav">
-                        <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="#">HOME</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="./upcomingevents.html">UPCOMING EVENTS</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="./pastevents.html">PAST EVENTS</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="./contact.html">CONTACTS</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="./stats.html">STATS</a>
-                        </li>
-                    </ul>
-                </div>
+                <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators"
+                    data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                </button>
             </div>
-        </nav>
+        </header>
 
-        <!-- CARRUSEL -->
-        <div id="carouselExampleIndicators" class="carousel slide">
-            <!-- Botones bajos del carrusel -->
-            <div id="botoneraCarrusel" class="carousel-indicators">
-                <!-- Aca van los botones bajos del carrusel crados dinamicamente-->
-            </div>
+        <main>
 
-            <!-- imagenes del carrusel -->
-            <div id="carrusel" class="carousel-inner">
-               <!--  Aca van las imagenes del carrusel creadas dinamicamente-->
-            </div>
+            <!-- BARRA DE BUSQUEDA -->
+            <nav class="navbar bg-dark  text-white">
+                <div class="container-fluid">
+                    <div class="ms-3">
+                        <!-- Aca se insertan dinamicamente los checkbox -->
+                        <div v-for="categoria of categoriasFiltrada" class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" v-bind:id="categoria"
+                                v-bind:value="categoria" @input="filtro">
+                            <label class="form-check-label" v-bind:for="categoria">{{categoria}}</label>
+                        </div>
+                    </div>
+                    <form class="d-flex me-4" role="search">
+                        <input id="serchBar" class="form-control me-2" type="search" placeholder="Buscar"
+                            aria-label="Search" v-model="serchText" @input="filtro">
+                        <!-- <button class="btn btn-outline-success" type="submit">Buscar</button> -->
+                    </form>
 
-            <!-- Botones next y previous del carrusel. -->
-            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators"
-                data-bs-slide="prev">
-                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Previous</span>
-            </button>
-            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators"
-                data-bs-slide="next">
-                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Next</span>
-            </button>
-        </div>
-    </header>
+            </nav>
 
-    <main>
+            <!-- CARDS -->
+            <div class="container mt-4 mb-4">
+                <div id="tarjetas" class="row justify-content-evenly">
+                    <!-- Aca van las tarjetas creadas dinamicamente -->
+                    <div v-for="evento of eventosFiltrados" class="card mb-4" style="width: 15rem;">
+                        <img :src="evento.image" class="card-img-top" :alt="'Imagen' + evento.name">
+                        <div class="card-body">
+                            <h5 class="card-title text-center">{{evento.name}}</h5>
+                            <p class="card-text">{{evento.description}}</p>
+                            <div class="d-flex justify-content-between">
+                                <span class="fw-bolder">$ {{evento.price}}</span>
+                                <a :href="'./details.html?id=' + evento._id" class="btn btn-dark">Details</a>
+                            </div>
+                        </div>
+                    </div>
 
-        <!-- BARRA DE BUSQUEDA -->
-        <nav class="navbar bg-dark  text-white">
-            <div class="container-fluid">
-                <div id="checkboxFiltros" class="ms-3">
-                    <!-- Aca se insertan dinamicamente los checkbox -->
-                </div>
-                <form class="d-flex me-4" role="search">
-                    <input id="serchBar" class="form-control me-2" type="search" placeholder="Buscar" aria-label="Search">
-                    <!-- <button class="btn btn-outline-success" type="submit">Buscar</button> -->
-                </form>
-
-        </nav>
-
-        <!-- CARDS -->
-        <div class="container mt-4 mb-4">
-            <div id="tarjetas" class="row justify-content-evenly">
-                <!-- Aca van las tarjetas creadas dinamicamente -->
-
-            </div>
-        </div>
-
-    </main>
-
-    <footer>
-        <nav class="navbar bg-dark justify-content-center">
-            <div class="container mx-0">
-                <div>
-                    <a class="me-2 text-decoration-none" href="#">
-                        <img src="./img/facebook.png" alt="facebook" width="32" height="32">
-                    </a>
-                    <a class="me-2 text-decoration-none" href="#">
-                        <img src="./img/instagram.png" alt="instagram" width="32" height="32">
-                    </a>
-                    <a class="me-2 text-decoration-none" href="#">
-                        <img src="./img/whatsapp.png" alt="whatsapp" width="32" height="32">
-                    </a>
-                </div>
-
-                <div d-flex align-items-center>
-                    <span class="text-white">COHORT</span>
                 </div>
             </div>
 
-        </nav>
-    </footer>
+        </main>
+
+        <footer>
+            <nav class="navbar bg-dark justify-content-center">
+                <div class="container mx-0">
+                    <div>
+                        <a class="me-2 text-decoration-none" href="#">
+                            <img src="./img/facebook.png" alt="facebook" width="32" height="32">
+                        </a>
+                        <a class="me-2 text-decoration-none" href="#">
+                            <img src="./img/instagram.png" alt="instagram" width="32" height="32">
+                        </a>
+                        <a class="me-2 text-decoration-none" href="#">
+                            <img src="./img/whatsapp.png" alt="whatsapp" width="32" height="32">
+                        </a>
+                    </div>
+
+                    <div d-flex align-items-center>
+                        <span class="text-white">COHORT</span>
+                    </div>
+                </div>
+
+            </nav>
+        </footer>
+    </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
         crossorigin="anonymous"></script>
-
-        <script src="./js/data.js"></script>
-        <script src="./js/index.js"></script>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="./js/data.js"></script>
+    <script src="./js/index.js"></script>
 </body>
 
 </html>
